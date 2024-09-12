@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Regular";
+  src: local("Poppins-Regular"),
+    url("./assets/fonts/Poppins-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Bold";
+  src: local("Poppins-Bold"),
+    url("./assets/fonts/Poppins-Bold.ttf") format("truetype");
+}
+
+@layer base {
+  *::-webkit-scrollbar {
+    display: none;
+  }
+  body {
+    background: #101010;
+  }
+}
+
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}
