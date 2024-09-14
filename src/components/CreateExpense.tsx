@@ -22,7 +22,7 @@ export default function CreateExpense() {
   const today_date: Date = new Date();
 
   const handleDate = (str_date: string) => {
-    const min_year: number = 2000;
+    const min_year: number = 2020;
     const input_date: Date = new Date(str_date);
     const year: number = input_date.getFullYear();
     if (year < min_year || year > today_date.getFullYear()) {
@@ -50,15 +50,15 @@ export default function CreateExpense() {
 
       if (expenseList[0] == null) {
         exp.id = 1;
-        addExpenseToList(exp);
-        alert("Expense Saved");
       } else {
         exp.id = expenseList[expenseList.length - 1].id + 1;
+      }
+      if (exp.category != "" && exp.price != 0 && exp.product != "") {
         addExpenseToList(exp);
         alert("Expense Saved");
       }
     } else {
-      alert(`Date Year : 2000 - ${today_date.getFullYear()} `);
+      alert(`Date Year : 2020 - ${today_date.getFullYear()} `);
     }
   };
 

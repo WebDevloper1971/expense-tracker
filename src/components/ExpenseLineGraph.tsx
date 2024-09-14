@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import {
   NameType,
@@ -30,14 +30,17 @@ export default function ExpenseLineGraph() {
 
   const { expenseList } = useExpenseList();
 
-  const [year, setYear] = useState<number>(0);
-  const [month, setMonth] = useState<number>(0);
-  const [monthlyExpense, setMonthlyExpense] = useState<Expense[]>();
+  const [month, setMonth] = useState<number>(
+    expenseList[0] != null ? expenseList[expenseList.length - 1].month : 0
+  );
+  const [year, setYear] = useState<number>(
+    expenseList[0] != null ? expenseList[expenseList.length - 1].year : 0
+  );
 
   const date_today: Date = new Date();
   const year_list: number[] = [];
 
-  for (let i = 2000; i <= date_today.getFullYear(); i++) {
+  for (let i = 2020; i <= date_today.getFullYear(); i++) {
     year_list.push(i);
   }
 
@@ -56,30 +59,23 @@ export default function ExpenseLineGraph() {
     "December",
   ];
 
-  useEffect(() => {
-    const formattedList = (monthlyExpense: Expense[]) => {
-      const totals: Expense[] = [];
-      monthlyExpense
-        .filter((y) => y.year == year)
-        .filter((e) => e.month == month)
-        .forEach((x) => {
-          const obj = totals.find((o) => o.day === x.day);
-          if (obj) {
-            obj.product += "," + x.product;
-            obj.price += x.price;
-          } else {
-            totals.push(x);
-          }
-        });
-      return totals;
-    };
-
-    if (expenseList[0] != null) {
-      setMonthlyExpense(
-        formattedList(expenseList).sort((a, b) => a.day - b.day)
-      );
-    }
-  }, [expenseList, month, year]);
+  const formattedList = () => {
+    const totals: Expense[] = [];
+    expenseList
+      .filter((y) => y.year == year)
+      .filter((e) => e.month == month)
+      .forEach((x) => {
+        const obj = totals.find((o) => o.day === x.day);
+        if (obj) {
+          obj.product += "," + x.product;
+          obj.price += x.price;
+        } else {
+          totals.push({ ...x, price: Number(x.price) });
+        }
+      });
+    totals.sort((a, b) => a.day - b.day);
+    return totals;
+  };
 
   const CustomTooltip = ({
     active,
@@ -107,11 +103,14 @@ export default function ExpenseLineGraph() {
 
   return (
     <>
-      <div className="container flex flex-col gap-4 p-4  rounded-sm bg-yellow-100 ">
+      <div className="exp-container flex flex-col gap-4 p-4  rounded-sm bg-yellow-100 w-full ">
         <div className=" flex flex-col gap-2">
           <label htmlFor="select_date">Select Year</label>
           <select
-            onChange={(e) => setYear(parseInt(e.target.value))}
+            value={year}
+            onChange={(e) => {
+              setYear(parseInt(e.target.value));
+            }}
             className="p-2 rounded-[4px] lg:w-24 w-full"
             id="select_date"
           >
@@ -136,9 +135,9 @@ export default function ExpenseLineGraph() {
             </button>
           ))}
         </div>
-        <div className="graph h-full">
+        <div className="graph h-full ">
           <ResponsiveContainer height={492}>
-            <AreaChart data={monthlyExpense} width={500} height={400}>
+            <AreaChart data={formattedList()} width={500} height={400}>
               <YAxis />
               <XAxis dataKey={"day"} />
               <CartesianGrid strokeDasharray={"5 5"} />

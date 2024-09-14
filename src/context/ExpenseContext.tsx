@@ -8,6 +8,8 @@ type ExpenseProviderProps = {
 type ExpenseContextType = {
   expenseList: Expense[];
   addExpenseToList: (exp: Expense) => void;
+  removeExpenseFromList: (id: number) => void;
+  deleteAllExpenses: () => void;
 };
 
 type Expense = {
@@ -37,11 +39,23 @@ export function ExpenseProvider({ children }: ExpenseProviderProps) {
     setExpenseList((prev) => [...prev, exp]);
   }
 
+  function removeExpenseFromList(id: number) {
+    const list: Expense[] = expenseList.filter((f) => f.id !== id);
+    setExpenseList(list);
+    alert("expense deleted");
+  }
+
+  function deleteAllExpenses() {
+    setExpenseList([]);
+  }
+
   return (
     <ExpenseListContext.Provider
       value={{
         expenseList,
         addExpenseToList,
+        removeExpenseFromList,
+        deleteAllExpenses,
       }}
     >
       {children}

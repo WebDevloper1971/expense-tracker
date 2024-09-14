@@ -1,4 +1,5 @@
 import CreateExpense from "./components/CreateExpense";
+import CrudExpense from "./components/CrudExpense";
 import ExpenseLineGraph from "./components/ExpenseLineGraph";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
@@ -14,10 +15,12 @@ function App() {
             <div className="bg-yellow-100 lg:w-[25%] md:w-full sm:w-full h-full shadow-2xl ">
               <CreateExpense />
             </div>
-            <div className="bg-[#181818] lg:w-[75%] md:w-full sm:w-full flex justify-center items-center shadow-2xl h-full">
+            <div className="bg-[#181818] lg:w-[75%] md:w-full sm:w-full flex justify-center items-center shadow-2xl h-full flex-col gap-4">
               <ExpenseLineGraph />
+              <CrudExpense />
             </div>
           </div>
+
           <Footer />
         </main>
       </ExpenseProvider>
