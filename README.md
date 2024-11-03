@@ -1,50 +1,63 @@
-# React + TypeScript + Vite
+# Ruppaiya Tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Description
 
-Currently, two official plugins are available:
+An expense tracker web app which simplifies personal finance management by allowing users to monitor spending habits. It offers real-time analytics and visual insights, helping users to stay on top of their finances and make informed financial decisions
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Snapshots
 
-## Expanding the ESLint configuration
+![Ruppaiya Tracker](src\assets\images\desktop.png)
+![Ruppaiya Tracker](src\assets\images\mobile.png)
+![Ruppaiya Tracker](src\assets\images\mobile2.png)
+![Ruppaiya Tracker](src\assets\images\mobile3.png)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Tools Used
 
-- Configure the top-level `parserOptions` property like this:
+- [Figma](https://www.figma.com/)
+- [Vite](https://vite.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [React-Hook-Form](https://www.react-hook-form.com/)
+- [Recharts](https://recharts.org/)
+- [Gh-Pages](https://www.npmjs.com/package/gh-pages)
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Table of Contents
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Installation
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/yourusername/yourproject.git
+   cd yourproject
+   ```
+2. **Install the Dependencies and Run The Project**:
+   ```bash
+   npm install
+   npm run dev
+   ```
+
+### Steps to use :
+
+1.  Select category for your expense
+2.  Enter what you spent on
+3.  Enter the price of expense
+4.  Select expense date
+5.  Click add expense
+
+### Walkthrough on graph :
+
+1. Graph always show last expense added
+2. Select month and year to view expenses of particular date
+3. Hover over graph to view details about expense
+
+## Issues and Feedback
+
+Please use GitHub issues to report bugs or suggest new features. Feel free to reach out to me for any questions.
+
+## License
+
+This project is licensed under the MIT License.

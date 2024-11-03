@@ -1,188 +1,114 @@
-import { useState } from "react";
 import { useExpenseList } from "../context/ExpenseContext";
+import { Expense } from "../types/ProjectTypes";
+import { FieldValues, useForm } from "react-hook-form";
 
 export default function CreateExpense() {
-  interface Expense {
-    id: number;
-    category: string;
-    product: string;
-    price: number;
-    month: number;
-    day: number;
-    year: number;
-  }
+  const { register, handleSubmit, reset } = useForm();
 
   const { expenseList, addExpenseToList } = useExpenseList();
 
-  const [category, setCategory] = useState<string>("");
-  const [product, setProduct] = useState<string>("");
-  const [price, setPrice] = useState<number>(0);
-  const [date, setDate] = useState<string>("");
+  const handleFormSubmit = (data: FieldValues) => {
+    const year = data.date?.substring(0, 4);
+    const month = data.date?.substring(5, 7);
+    const day = data.date?.substring(8, 10);
 
-  const today_date: Date = new Date();
+    const freshExpense: Expense = {
+      product: data.product,
+      category: data.category,
+      price: data.price,
+      date: data.date,
+      day: Number(day),
+      month: Number(month),
+      year: Number(year),
+    };
 
-  const handleDate = (str_date: string) => {
-    const min_year: number = 2020;
-    const input_date: Date = new Date(str_date);
-    const year: number = input_date.getFullYear();
-    if (year < min_year || year > today_date.getFullYear()) {
-      return false;
+    if (expenseList.length < 1) {
+      freshExpense.id = 1;
     } else {
-      return true;
+      freshExpense.id = expenseList[expenseList.length - 1].id! + 1;
     }
-  };
 
-  const handleFormSubmit = () => {
-    if (handleDate(date)) {
-      const d = new Date(date);
-
-      const id = 1;
-
-      const exp: Expense = {
-        id: id,
-        category: category,
-        product: product,
-        price: price!,
-        month: d.getMonth(),
-        day: d.getDate(),
-        year: d.getFullYear(),
-      };
-
-      if (expenseList[0] == null) {
-        exp.id = 1;
-      } else {
-        exp.id = expenseList[expenseList.length - 1].id + 1;
-      }
-      if (exp.category != "" && exp.price != 0 && exp.product != "") {
-        addExpenseToList(exp);
-        alert("Expense Saved");
-      }
-    } else {
-      alert(`Date Year : 2020 - ${today_date.getFullYear()} `);
-    }
+    addExpenseToList(freshExpense);
+    reset();
+    return alert("expense saved successfully");
   };
 
   return (
     <>
-      <div className="w-full flex items-center  rounded-[4px]">
+      <div className="w-full flex items-center rounded-[4px]">
         <form
-          onSubmit={handleFormSubmit}
+          onSubmit={handleSubmit((data) => handleFormSubmit(data))}
           className="py-6 w-full flex flex-col justify-center items-center px-4 gap-4"
         >
-          <div className="input-group flex flex-col gap-2 px-4 w-full">
-            <label htmlFor="category" className="text-black">
-              Category
-            </label>
-            <select
-              name=""
-              id="category"
-              className="p-4 text-sm rounded-[4px] border border-slate-400 overflow-y-auto"
-              onChange={(e) => setCategory(e.target.value)}
-              required
-            >
-              <option value="" className="overflow-y-scroll">
-                select expense category
-              </option>
-              <option value="electronics" className="overflow-y-scroll">
-                ⚡ Electronics
-              </option>
-              <option value="smartphones" className="overflow-y-scroll">
-                📱 Smartphones
-              </option>
-              <option value="stationary" className="overflow-y-scroll">
-                📏 Stationary
-              </option>
-              <option value="clothes" className="overflow-y-scroll">
-                👕 Clothes
-              </option>
-              <option value="groceries" className="overflow-y-scroll">
-                🛒 Groceries
-              </option>
-              <option value="fruits" className="overflow-y-scroll">
-                🍒 Fruits
-              </option>
-              <option value="vegetables" className="overflow-y-scroll">
-                🫑 Vegetables
-              </option>
-              <option value="cosmetics" className="overflow-y-scroll">
-                💅 Cosmetics
-              </option>
-              <option value="fuel" className="overflow-y-scroll">
-                ⛽ Fuel
-              </option>
-              <option value="headphones" className="overflow-y-scroll">
-                🎧 Headphones
-              </option>
-              <option value="stock" className="overflow-y-scroll">
-                📈 Stocks
-              </option>
-              <option value="utensils" className="overflow-y-scroll">
-                🥣 Utensils
-              </option>
-              <option value="medicine" className="overflow-y-scroll">
-                💊 Medicine
-              </option>
-              <option value="hospital" className="overflow-y-scroll">
-                🏥 Hospital
-              </option>
-              <option value="work" className="overflow-y-scroll">
-                🏢 Work
-              </option>
-              <option value="travel" className="overflow-y-scroll">
-                🚙 Travel
-              </option>
-            </select>
-          </div>
-          <div className="input-group flex flex-col gap-2 px-4 w-full ">
-            <label htmlFor="product" className="text-black">
-              Product
-            </label>
-            <input
-              type="text"
-              id="product"
-              placeholder="enter what you spent on"
-              className="p-4 text-sm rounded-[4px] border border-slate-400"
-              onChange={(e) => setProduct(e.target.value)}
-              required
-            />
-          </div>
-          <div className="input-group flex flex-col gap-2 px-4 w-full">
-            <label htmlFor="price" className="text-black">
-              Price
-            </label>
-            <input
-              type="number"
-              id="price"
-              min={10}
-              max={1000000}
-              placeholder="enter how much you spent"
-              className="p-4 text-sm rounded-[4px] border border-slate-400"
-              onChange={(e) => setPrice(parseInt(e.target.value))}
-              required
-            />
-          </div>
+          <label htmlFor="category" className="w-full">
+            Category
+          </label>
+          <select
+            {...register("category")}
+            className="w-full h-12 px-4 rounded"
+            required
+            id="category"
+          >
+            <option value="" className="text-gray-600">
+              select expense category
+            </option>
+            {[
+              { icon: "📱", name: "smartphone" },
+              { icon: "🫑", name: "vegetable" },
+              { icon: "📏", name: "stationary" },
+              { icon: "💊", name: "medicine" },
+              { icon: "⛽", name: "fuel" },
+            ].map((c, i) => {
+              return (
+                <option key={i} value={c.name}>{`${
+                  c.icon
+                } ${c.name.toUpperCase()}`}</option>
+              );
+            })}
+          </select>
 
-          <div className="input-group flex flex-col gap-2 px-4 w-full">
-            <label htmlFor="date" className="text-black">
-              Date
-            </label>
-            <input
-              type="date"
-              id="date"
-              contentEditable="false"
-              className="p-4 text-sm rounded-[4px] border border-slate-400"
-              onChange={(e) => {
-                setDate(e.target.value);
-              }}
-              required
-            />
-          </div>
+          <label htmlFor="product" className="w-full">
+            Product
+          </label>
+          <input
+            {...register("product")}
+            id="product"
+            className="w-full h-12 px-4 rounded"
+            placeholder="enter what you spent on"
+            autoComplete="on"
+            required
+          />
 
-          <div className="input-group flex flex-col gap-4 px-4 w-full mt-10">
-            <button className="bg-slate-800 text-white text-md font-primaryRegular  px-8 py-6 rounded-[4px]">
-              Add Expense
-            </button>
-          </div>
+          <label htmlFor="price" className="w-full">
+            Price
+          </label>
+          <input
+            {...register("price", { min: 10, max: 100000 })}
+            className="w-full h-12 px-4 rounded"
+            type="number"
+            id="price"
+            autoComplete="on"
+            placeholder="enter how much you spent"
+            required
+          />
+
+          <label htmlFor="date" className="w-full">
+            Date
+          </label>
+          <input
+            {...register("date")}
+            className="w-full h-12 px-4 rounded"
+            autoComplete="on"
+            id="date"
+            type="date"
+            required
+          />
+
+          <input
+            type="submit"
+            value="Add Expense"
+            className="w-full h-12 bg-black text-white rounded mt-4"
+          />
         </form>
       </div>
     </>

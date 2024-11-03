@@ -1,5 +1,6 @@
 import { createContext, ReactNode, useContext } from "react";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import { Expense } from "../types/ProjectTypes";
 
 type ExpenseProviderProps = {
   children: ReactNode;
@@ -10,16 +11,6 @@ type ExpenseContextType = {
   addExpenseToList: (exp: Expense) => void;
   removeExpenseFromList: (id: number) => void;
   deleteAllExpenses: () => void;
-};
-
-type Expense = {
-  id: number;
-  category: string;
-  product: string;
-  price: number;
-  month: number;
-  day: number;
-  year: number;
 };
 
 const ExpenseListContext = createContext({} as ExpenseContextType);
